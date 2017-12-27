@@ -29,7 +29,7 @@ class Reactor
     end
 
     title = message["messages"]&.[](0)&.[]("text") || "メッセージの取得に失敗しました... :bow:"
-    reply_url = "https://gmo-media.slack.com/archives/#{channel}/p#{ts[0..-7]}.#{ts[-6..-1]}"
+    reply_url = "https://gmo-media.slack.com/archives/#{channel}/p#{ts}"
     options = {body: reply_url + "\r\n\r\n>" + title}
     response = GithubHandler.create_issue(Config.github_owner, Config.github_repo, filter_title(title), options: options)
     issue_url = response["html_url"]
@@ -41,10 +41,10 @@ class Reactor
   end
 
   def self.filter_title(text)
+    regex_subteam = /<!subteam\^[a-zA-Z0-9]*\|@[a-zA-Z0-9]*>/
     regex_at_user = /<@[a-zA-Z0-9]*>/
-    regex_subteam = /<!subteam^[a-zA-Z0-9]*|@[a-zA-Z0-9]*>/
-    text.gsub(regex_at_user, "")
-        .gsub(regex_subteam, "")
+    text.gsub(regex_subteam, "")
+        .gsub(regex_at_user, "")
         .strip
         .[](0, 256)
   end
