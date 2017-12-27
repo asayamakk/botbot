@@ -11,7 +11,7 @@ SlackHandler.setup
 GithubHandler.setup
 Config.setup
 
-logger = Logger.new('bot.log')
+logger = Logger.new(STDOUT, 2)
 client = Slack.realtime
 
 client.on :hello do

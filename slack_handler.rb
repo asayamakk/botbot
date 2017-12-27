@@ -17,8 +17,8 @@ class SlackHandler
       @client.channels_replies(channel: channel, thread_ts: ts)
     end
 
-    def post_message(channel, body)
-      @client.chat_postMessage(channel: channel, text: body)
+    def post_message(channel, body, options: {})
+      @client.chat_postMessage(channel: channel, text: body, **options)
     end
 
     def add_reaction(emoji_name, channel, ts)

@@ -1,5 +1,5 @@
 class Reactor
-  @logger = Logger.new('bot.log')
+  @logger = Logger.new(STDOUT, 2)
 
   # @param reaction_data Hash
   # Reference: https://api.slack.com/events/reaction_added
@@ -33,8 +33,10 @@ class Reactor
     options = {body: reply_url + "\r\n\r\n>" + title}
     response = GithubHandler.create_issue(Config.github_owner, Config.github_repo, filter_title(title), options: options)
     issue_url = response["html_url"]
+    @logger.info("Issue is created, url: issue_url")
     bot_reply = "Hello #{SlackHandler.search_user(user_id) || "unknown"}-san,\r\nThank you for the report.\r\n#{issue_url}"
-    SlackHandler.post_message(channel, bot_reply)
+    message_option = { as_user: true }
+    SlackHandler.post_message(channel, bot_reply, options: message_option)
     SlackHandler.add_reaction(Config.done_emoji, channel, ts)
   end
 
