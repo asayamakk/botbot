@@ -55,3 +55,4 @@ build-iPhoneSimulator/
 
 .env
 Dockerfile
+config.json

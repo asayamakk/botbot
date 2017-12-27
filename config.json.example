@@ -1,0 +1,7 @@
+{
+  "issue_emoji": "example",
+  "done_emoji": "heavy_check_mark",
+  "slack_team": "<YOUR SLACK TEAM SUBDOMAIN>",
+  "github_owner": "<YOUR GITHUB USERNAME>",
+  "github_repo": "<YOUR GITHUB REPOSITORY>"
+}
