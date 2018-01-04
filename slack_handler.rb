@@ -36,7 +36,7 @@ class SlackHandler
     end
 
     def search_user(id)
-      return user_name if user_name = @user_id_name&.[](id)
+      return @user_id_name&.[](id) if @user_id_name&.[](id)
       update_user_id_name
       @user_id_name[id]
     end
