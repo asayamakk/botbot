@@ -45,11 +45,7 @@ class Reactor
       @logger.fatal(notice_message)
       @logger.fatal(err)
 
-      begin
-        ### これも失敗するかも知れないので例外握りつぶす系で
-        SlackHandler.post_message(channel, notice_message, options: message_option)
-      rescue
-      end
+      SlackHandler.post_message(channel, notice_message, options: message_option) rescue nil
     end
   end
 
