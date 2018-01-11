@@ -31,13 +31,22 @@ class Reactor
     title = message["messages"]&.[](0)&.[]("text") || "メッセージの取得に失敗しました... :bow:"
     reply_url = "https://gmo-media.slack.com/archives/#{channel}/p#{ts}"
     options = {body: reply_url + "\r\n\r\n>" + title}
-    response = GithubHandler.create_issue(Config.github_owner, Config.github_repo, filter_title(title), options: options)
-    issue_url = response["html_url"]
-    @logger.info("Issue is created, url: issue_url")
-    bot_reply = "Hello #{SlackHandler.search_user(user_id) || "unknown"}-san,\r\nThank you for the report.\r\n#{issue_url}"
-    message_option = { as_user: true }
-    SlackHandler.post_message(channel, bot_reply, options: message_option)
-    SlackHandler.add_reaction(Config.done_emoji, channel, ts)
+    
+    begin 
+      response = GithubHandler.create_issue(Config.github_owner, Config.github_repo, filter_title(title), options: options)
+      issue_url = response["html_url"]
+      @logger.info("Issue is created, url: issue_url")
+      bot_reply = "Hello #{SlackHandler.search_user(user_id) || "unknown"}-san,\r\nThank you for the report.\r\n#{issue_url}"
+      message_option = { as_user: true }
+      SlackHandler.post_message(channel, bot_reply, options: message_option)
+      SlackHandler.add_reaction(Config.done_emoji, channel, ts)
+    rescue => err
+      notice_message = "Issue creation and/or Slack response failed."
+      @logger.fatal(notice_message)
+      @logger.fatal(err)
+
+      SlackHandler.post_message(channel, notice_message, options: message_option) rescue nil
+    end
   end
 
   def self.filter_title(text)

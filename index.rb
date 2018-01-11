@@ -12,6 +12,7 @@ GithubHandler.setup
 Config.setup
 
 logger = Logger.new(STDOUT, 2)
+STDOUT.sync = true
 client = Slack.realtime
 
 client.on :hello do
